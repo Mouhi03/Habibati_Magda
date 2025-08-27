@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Access</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .title {
+            margin-bottom: 40px;
+        }
+
+        .title h1 {
+            font-size: 2.5rem;
+            color: #d64d71;
+            margin-bottom: 10px;
+        }
+
+        .title p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .cute-button {
+            width: 140px;
+            height: 140px;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cute-button:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .cute-button:active {
+            transform: translateY(-5px);
+        }
+
+        .cute-button i {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .cute-button span {
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .button-1 {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            color: #fff;
+        }
+
+        .button-2 {
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            color: #fff;
+        }
+
+        .button-3 {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            color: #d64d71;
+        }
+
+        .button-3:hover {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            color: #fff;
+        }
+
+        /* Passcode Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: modalFadeIn 0.5s;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            color: #d64d71;
+            margin-bottom: 20px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 15px;
+            margin: 20px 0;
+            border: 2px solid #e6e6e6;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            text-align: center;
+            letter-spacing: 2px;
+            transition: border-color 0.3s;
+        }
+
+        .modal-input:focus {
+            border-color: #d64d71;
+            outline: none;
+        }
+
+        .modal-button {
+            background: #d64d71;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .modal-button:hover {
+            background: #c43d61;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(214, 77, 113, 0.3);
+        }
+
+        .modal-error {
+            color: #ff4757;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #aaa;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #d64d71;
+        }
+
+        /* Decorative elements */
+        .decoration {
+            position: absolute;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .heart {
+            color: #d64d71;
+            font-size: 1.2rem;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .buttons-container {
+                gap: 20px;
+            }
+            
+            .cute-button {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .title h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">
+            <h1>Special Access</h1>
+            <p>Choose one of the options below</p>
+        </div>
+        
+        <div class="buttons-container">
+            <div class="cute-button button-1">
+                <i class="fas fa-gift"></i>
+                <span>Surprise</span>
+            </div>
+            
+            <div class="cute-button button-2">
+                <i class="fas fa-heart"></i>
+                <span>Love</span>
+            </div>
+            
+            <div class="cute-button button-3" id="birthdayButton">
+                <i class="fas fa-birthday-cake"></i>
+                <span>Birthday</span>
+            </div>
+        </div>
+        
+        <p>Click on a button to discover what's inside!</p>
+    </div>
+
+    <!-- Passcode Modal -->
+    <div class="modal" id="passcodeModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <h2 class="modal-title">Birthday Access</h2>
+            <p>Enter the secret passcode to continue to the birthday celebration!</p>
+            <input type="password" class="modal-input" id="passcodeInput" placeholder="Enter passcode">
+            <p class="modal-error" id="passcodeError">Well, you need an invitation to that!</p>
+            <button class="modal-button" id="submitPasscode">Submit</button>
+        </div>
+    </div>
+
+    <!-- Decorative elements -->
+    <div class="decoration" style="top: 10%; left: 5%;">
+        <i class="fas fa-heart heart" style="animation-delay: 0s;"></i>
+    </div>
+    <div class="decoration" style="top: 15%; right: 10%;">
+        <i class="fas fa-heart heart" style="animation-delay: 1s;"></i>
+    </div>
+    <div class="decoration" style="bottom: 20%; left: 15%;">
+        <i class="fas fa-heart heart" style="animation-delay: 2s;"></i>
+    </div>
+    <div class="decoration" style="bottom: 15%; right: 5%;">
+        <i class="fas fa-heart heart" style="animation-delay: 1.5s;"></i>
+    </div>
+
+    <script>
+        // DOM Elements
+        const birthdayButton = document.getElementById('birthdayButton');
+        const passcodeModal = document.getElementById('passcodeModal');
+        const closeModal = document.getElementById('closeModal');
+        const submitPasscode = document.getElementById('submitPasscode');
+        const passcodeInput = document.getElementById('passcodeInput');
+        const passcodeError = document.getElementById('passcodeError');
+        const surpriseButton = document.querySelector('.button-1'); // Surprise button
+        
+        // Open modal when birthday button is clicked
+        birthdayButton.addEventListener('click', () => {
+            passcodeModal.style.display = 'flex';
+            passcodeInput.value = '';
+            passcodeError.style.display = 'none';
+        });
+        
+        // Redirect when surprise button is clicked
+        surpriseButton.addEventListener('click', () => {
+            window.location.href = 'surprise.html';
+        });
+
+        // Close modal when X is clicked
+        closeModal.addEventListener('click', () => {
+            passcodeModal.style.display = 'none';
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === passcodeModal) {
+                passcodeModal.style.display = 'none';
+            }
+        });
+        
+        // Submit passcode
+        submitPasscode.addEventListener('click', () => {
+            if (passcodeInput.value === '62432') {
+                // Redirect to birthday page
+                alert('Passcode accepted! Redirecting to birthday page...');
+                window.location.href = 'birthday.html';
+            } else {
+                passcodeError.style.display = 'block';
+            }
+        });
+        
+        // Allow pressing Enter to submit
+        passcodeInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                submitPasscode.click();
+            }
+        });
+        
+        // Add click effects to all buttons
+        document.querySelectorAll('.cute-button').forEach(button => {
+            button.addEventListener('click', function() {
+                if (this !== birthdayButton) {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun Mini Games Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffcce6 0%, #ccf2ff 100%);
+            color: #555;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 2.8rem;
+            background: linear-gradient(45deg, #ff6b8b, #ffa5a5, #ffd966, #8ac6d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #888;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab.active {
+            background: #ff85a2;
+            color: white;
+        }
+
+        .tab:hover:not(.active) {
+            background: rgba(255, 133, 162, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .game-image {
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+
+        .game-1 .game-image {
+            background: linear-gradient(45deg, #ff6b8b, #ffa5a5);
+        }
+
+        .game-2 .game-image {
+            background: linear-gradient(45deg, #8ac6d1, #c6e2ff);
+        }
+
+        .game-3 .game-image {
+            background: linear-gradient(45deg, #ffd966, #ffb366);
+        }
+
+        .game-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .game-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #ff6b8b;
+        }
+
+        .game-content p {
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #ff85a2;
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #ff6b8b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 139, 0.4);
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 20px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Memory Game Styles */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px auto;
+            max-width: 500px;
+        }
+
+        .memory-card {
+            height: 100px;
+            background: #ffd3e0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+
+        .memory-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .memory-card .front,
+        .memory-card .back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+        }
+
+        .memory-card .front {
+            background: white;
+            transform: rotateY(180deg);
+        }
+
+        .memory-card .back {
+            background: #ff85a2;
+            color: transparent;
+        }
+
+        /* Cookie Clicker Styles */
+        #clicker-display {
+            font-size: 2rem;
+            margin: 20px 0;
+            color: #ff6b8b;
+        }
+
+        #cookie {
+            font-size: 8rem;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: transform 0.1s;
+            color: #d2691e;
+        }
+
+        #cookie:active {
+            transform: scale(0.95);
+        }
+
+        #per-second {
+            font-size: 1.5rem;
+            margin: 10px 0;
+            color: #8ac6d1;
+        }
+
+        .upgrades {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        /* Bubble Game Styles */
+        #bubble-game-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(180deg, #a6e1ff, #e4f3ff);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+            border: 3px solid #8ac6d1;
+        }
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(173, 216, 230, 0.6));
+            box-shadow: inset 0 -5px 15px rgba(255, 255, 255, 0.8),
+                        inset 0 5px 15px rgba(173, 216, 230, 0.6),
+                        0 0 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .bubble:active {
+            transform: scale(1.1);
+        }
+
+        .bubble.popped {
+            animation: pop 0.3s forwards;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .stat {
+            font-size: 1.2rem;
+            color: #555;
+        }
+
+        /* Reaction Game Styles */
+        #reaction-box {
+            width: 300px;
+            height: 300px;
+            background: #8ac6d1;
+            margin: 20px auto;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        #reaction-message {
+            font-size: 1.5rem;
+            margin: 20px 0;
+            color: #888;
+        }
+
+        #reaction-timer {
+            font-size: 2rem;
+            margin: 10px 0;
+            color: #ff6b8b;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            color: #aaa;
+            border-top: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .memory-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            #reaction-box {
+                width: 250px;
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">Fun Mini Games</div>
+            <p class="tagline">Play these cute and fun mini games to pass the time!</p>
+            
+            <div class="nav-tabs">
+                <div class="tab active" data-tab="home">Home</div>
+                <div class="tab" data-tab="memory-game">Memory Game</div>
+                <div class="tab" data-tab="clicker-game">Cookie Clicker</div>
+                <div class="tab" data-tab="bubble-game">Bubble Pop</div>
+                <div class="tab" data-tab="reaction-game">Reaction Test</div>
+            </div>
+        </header>
+
+        <section id="home" class="content-section active">
+            <h2>Welcome to Mini Games Hub!</h2>
+            <p>Choose a game to play from the menu above or select one below:</p>
+            <div class="games-grid">
+                <div class="game-card game-1" data-game="memory-game">
+                    <div class="game-image">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="game-content">
+                        <h3>Memory Match</h3>
+                        <p>Test your memory by matching pairs of cute icons!</p>
+                        <a class="btn play-btn" data-game="memory-game">Play Now</a>
+                    </div>
+                </div>
+                <div class="game-card game-2" data-game="clicker-game">
+                    <div class="game-image">
+                        <i class="fas fa-cookie"></i>
+                    </div>
+                    <div class="game-content">
+                        <h3>Cookie Clicker</h3>
+                        <p>Click the cookie to earn points and unlock upgrades!</p>
+                        <a class="btn play-btn" data-game="clicker-game">Play Now</a>
+                    </div>
+                </div>
+                <div class="game-card game-3" data-game="bubble-game">
+                    <div class="game-image">
+                        <i class="fas fa-water"></i>
+                    </div>
+                    <div class="game-content">
+                        <h3>Bubble Pop</h3>
+                        <p>Pop as many bubbles as you can before time runs out!</p>
+                        <a class="btn play-btn" data-game="bubble-game">Play Now</a>
+                    </div>
+                </div>
+                <div class="game-card game-3" data-game="reaction-game">
+                    <div class="game-image">
+                        <i class="fas fa-stopwatch"></i>
+                    </div>
+                    <div class="game-content">
+                        <h3>Reaction Test</h3>
+                        <p>Test how fast your reflexes are with this fun game!</p>
+                        <a class="btn play-btn" data-game="reaction-game">Play Now</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="memory-game" class="content-section">
+            <h2>Memory Match Game</h2>
+            <div class="game-container">
+                <p>Match all the pairs of cards as quickly as you can!</p>
+                <div class="memory-grid">
+                    <!-- Cards will be generated by JavaScript -->
+                </div>
+                <p>Matches: <span id="match-count">0</span>/8</p>
+                <p>Time: <span id="memory-time">0</span>s</p>
+                <button class="btn" id="memory-reset">Reset Game</button>
+                <button class="btn back-btn">Back to Home</button>
+            </div>
+        </section>
+
+        <section id="clicker-game" class="content-section">
+            <h2>Cookie Clicker</h2>
+            <div class="game-container">
+                <div id="clicker-display">Cookies: 0</div>
+                <div id="cookie">🍪</div>
+                <div id="per-second">Per second: 0</div>
+                
+                <div class="upgrades">
+                    <button class="btn upgrade-btn" data-cost="10" data-power="1">
+                        Auto-Clicker (Cost: 10)
+                    </button>
+                    <button class="btn upgrade-btn" data-cost="50" data-power="2">
+                        Grandma (Cost: 50)
+                    </button>
+                    <button class="btn upgrade-btn" data-cost="100" data-power="5">
+                        Bakery (Cost: 100)
+                    </button>
+                </div>
+                
+                <button class="btn back-btn">Back to Home</button>
+            </div>
+        </section>
+
+        <section id="bubble-game" class="content-section">
+            <h2>Bubble Pop Game</h2>
+            <div class="game-container">
+                <p>Pop as many bubbles as you can before time runs out!</p>
+                
+                <div class="game-stats">
+                    <div class="stat">
+                        <div id="bubble-display">Score: 0</div>
+                    </div>
+                    <div class="stat">
+                        <div id="bubble-timer">Time left: 30s</div>
+                    </div>
+                    <div class="stat">
+                        <div id="bubble-highscore">High Score: 0</div>
+                    </div>
+                </div>
+                
+                <div id="bubble-game-container"></div>
+                
+                <div class="game-controls">
+                    <button class="btn" id="bubble-start">Start Game</button>
+                    <button class="btn" id="bubble-reset">Reset Game</button>
+                    <button class="btn back-btn">Back to Home</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="reaction-game" class="content-section">
+            <h2>Reaction Test</h2>
+            <div class="game-container">
+                <p>Click the box as soon as it turns green!</p>
+                <div id="reaction-box">Wait for green...</div>
+                <div id="reaction-message">Click to start the game</div>
+                <div id="reaction-timer">Time: 0.00s</div>
+                <button class="btn" id="reaction-reset">Try Again</button>
+                <button class="btn back-btn">Back to Home</button>
+            </div>
+        </section>
+
+        <footer>
+            <p>Made with love and excitement by yours only, Mouhi❤️ | © 2025 Fun Mini Games</p>
+        </footer>
+    </div>
+
+    <script>
+        // Tab navigation
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.getAttribute('data-tab');
+                
+                // Remove active class from all tabs and sections
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Show corresponding section
+                document.getElementById(tabName).classList.add('active');
+                
+                // If memory game is opened, reset it
+                if (tabName === 'memory-game') {
+                    initMemoryGame();
+                }
+                
+                // Reset reaction game when opened
+                if (tabName === 'reaction-game') {
+                    resetReactionGame();
+                }
+                
+                // Initialize bubble game when opened
+                if (tabName === 'bubble-game') {
+                    initBubbleGame();
+                }
+            });
+        });
+
+        // Play button navigation
+        document.querySelectorAll('.play-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const gameName = btn.getAttribute('data-game');
+                
+                // Remove active class from all tabs and sections
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                
+                // Add active class to game tab and show game section
+                document.querySelector(`.tab[data-tab="${gameName}"]`).classList.add('active');
+                document.getElementById(gameName).classList.add('active');
+                
+                // If memory game is opened, reset it
+                if (gameName === 'memory-game') {
+                    initMemoryGame();
+                }
+                
+                // Reset reaction game when opened
+                if (gameName === 'reaction-game') {
+                    resetReactionGame();
+                }
+                
+                // Initialize bubble game when opened
+                if (gameName === 'bubble-game') {
+                    initBubbleGame();
+                }
+            });
+        });
+
+        // Back buttons
+        document.querySelectorAll('.back-btn').forEach(btn => {
+            btn.addEventListener('click', goHome);
+        });
+        
+        function goHome() {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelector('.tab[data-tab="home"]').classList.add('active');
+            document.getElementById('home').classList.add('active');
+        }
+
+        // Memory game logic
+        const symbols = ['🌸', '🐱', '🦄', '🍦', '🎀', '🍩', '🎁', '🌈'];
+        let cards = [...symbols, ...symbols];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let memoryTime = 0;
+        let memoryTimer;
+        let shuffledCards = [];
+
+        // Shuffle function
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Initialize memory game
+        function initMemoryGame() {
+            const memoryGrid = document.querySelector('.memory-grid');
+            memoryGrid.innerHTML = '';
+            shuffledCards = shuffle(cards);
+            flippedCards = [];
+            matchedPairs = 0;
+            memoryTime = 0;
+            document.getElementById('match-count').textContent = '0';
+            document.getElementById('memory-time').textContent = '0';
+            
+            clearInterval(memoryTimer);
+            memoryTimer = setInterval(() => {
+                memoryTime++;
+                document.getElementById('memory-time').textContent = memoryTime;
+            }, 1000);
+            
+            shuffledCards.forEach((symbol, index) => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.innerHTML = `
+                    <div class="front">${symbol}</div>
+                    <div class="back">?</div>
+                `;
+                card.addEventListener('click', () => flipCard(card, symbol, index));
+                memoryGrid.appendChild(card);
+            });
+        }
+
+        // Flip card function
+        function flipCard(card, symbol, index) {
+            if (flippedCards.length < 2 && !card.classList.contains('flipped') && !flippedCards.includes(index)) {
+                card.classList.add('flipped');
+                flippedCards.push(index);
+                
+                if (flippedCards.length === 2) {
+                    setTimeout(checkMatch, 800);
+                }
+            }
+        }
+
+        // Check for match
+        function checkMatch() {
+            const [firstIndex, secondIndex] = flippedCards;
+            const firstCard = document.querySelectorAll('.memory-card')[firstIndex];
+            const secondCard = document.querySelectorAll('.memory-card')[secondIndex];
+            
+            if (shuffledCards[firstIndex] === shuffledCards[secondIndex]) {
+                // Match found
+                matchedPairs++;
+                document.getElementById('match-count').textContent = matchedPairs;
+                
+                if (matchedPairs === 8) {
+                    clearInterval(memoryTimer);
+                    setTimeout(() => {
+                        alert(`Congratulations! You've matched all pairs in ${memoryTime} seconds!`);
+                    }, 500);
+                }
+            } else {
+                // No match
+                firstCard.classList.remove('flipped');
+                secondCard.classList.remove('flipped');
+            }
+            
+            flippedCards = [];
+        }
+
+        // Reset memory game
+        document.getElementById('memory-reset').addEventListener('click', initMemoryGame);
+
+        // Cookie Clicker game logic
+        let cookies = 0;
+        let perSecond = 0;
+        let clickPower = 1;
+        
+        // Initialize cookie clicker
+        function initCookieClicker() {
+            cookies = 0;
+            perSecond = 0;
+            clickPower = 1;
+            updateClickerDisplay();
+            document.getElementById('per-second').textContent = `Per second: ${perSecond}`;
+            
+            // Reset upgrade buttons
+            document.querySelectorAll('.upgrade-btn').forEach(btn => {
+                const originalCost = btn.getAttribute('data-original-cost') || btn.getAttribute('data-cost');
+                btn.setAttribute('data-cost', originalCost);
+                btn.setAttribute('data-original-cost', originalCost);
+                btn.textContent = `${btn.textContent.split('(')[0]} (Cost: ${originalCost})`;
+            });
+        }
+        
+        // Cookie click event
+        document.getElementById('cookie').addEventListener('click', () => {
+            cookies += clickPower;
+            updateClickerDisplay();
+        });
+        
+        function updateClickerDisplay() {
+            document.getElementById('clicker-display').textContent = `Cookies: ${Math.floor(cookies)}`;
+        }
+        
+        // Upgrade buttons
+        document.querySelectorAll('.upgrade-btn').forEach(btn => {
+            // Store original cost as a data attribute
+            const originalCost = btn.getAttribute('data-cost');
+            btn.setAttribute('data-original-cost', originalCost);
+            
+            btn.addEventListener('click', () => {
+                const cost = parseInt(btn.getAttribute('data-cost'));
+                const power = parseInt(btn.getAttribute('data-power'));
+                
+                if (cookies >= cost) {
+                    cookies -= cost;
+                    perSecond += power;
+                    document.getElementById('per-second').textContent = `Per second: ${perSecond}`;
+                    updateClickerDisplay();
+                    
+                    // Increase cost for next purchase
+                    const newCost = cost * 2;
+                    btn.setAttribute('data-cost', newCost);
+                    btn.textContent = `${btn.textContent.split('(')[0]} (Cost: ${newCost})`;
+                } else {
+                    alert("Not enough cookies!");
+                }
+            });
+        });
+        
+        // Auto cookie generation
+        setInterval(() => {
+            cookies += perSecond / 10; // Update 10 times per second for smoother progress
+            updateClickerDisplay();
+        }, 100);
+
+        // Reaction game logic
+        const reactionBox = document.getElementById('reaction-box');
+        const reactionMessage = document.getElementById('reaction-message');
+        const reactionTimer = document.getElementById('reaction-timer');
+        let startTime, endTime, timeout;
+        let gameStarted = false;
+
+        function resetReactionGame() {
+            clearTimeout(timeout);
+            reactionBox.style.backgroundColor = "#8ac6d1";
+            reactionBox.textContent = "Wait for green...";
+            reactionMessage.textContent = "Click to start the game";
+            reactionTimer.textContent = "Time: 0.00s";
+            gameStarted = false;
+        }
+
+        reactionBox.addEventListener('click', () => {
+            if (!gameStarted) {
+                startReactionGame();
+            } else {
+                if (reactionBox.style.backgroundColor === 'rgb(114, 214, 114)') {
+                    // Clicked when green
+                    endTime = new Date();
+                    const reactionTime = (endTime - startTime) / 1000;
+                    reactionTimer.textContent = `Time: ${reactionTime.toFixed(2)}s`;
+                    reactionMessage.textContent = "Your reaction time: " + reactionTime.toFixed(2) + "s";
+                    reactionBox.style.backgroundColor = "#8ac6d1";
+                    reactionBox.textContent = "Click to play again";
+                    gameStarted = false;
+                } else {
+                    // Clicked too soon
+                    reactionMessage.textContent = "Too soon! Wait for green.";
+                    clearTimeout(timeout);
+                    reactionBox.style.backgroundColor = "#8ac6d1";
+                    reactionBox.textContent = "Click to try again";
+                    gameStarted = false;
+                }
+            }
+        });
+
+        function startReactionGame() {
+            reactionBox.style.backgroundColor = "#ff6b6b";
+            reactionBox.textContent = "Wait for green...";
+            reactionMessage.textContent = "Wait for the box to turn green...";
+            gameStarted = true;
+            
+            // Random delay between 2-5 seconds
+            const delay = Math.random() * 3000 + 2000;
+            
+            timeout = setTimeout(() => {
+                if (gameStarted) {
+                    reactionBox.style.backgroundColor = "#72d672";
+                    reactionBox.textContent = "CLICK NOW!";
+                    startTime = new Date();
+                }
+            }, delay);
+        }
+
+        document.getElementById('reaction-reset').addEventListener('click', resetReactionGame);
+
+        // Bubble Pop game logic
+        const bubbleContainer = document.getElementById('bubble-game-container');
+        const bubbleDisplay = document.getElementById('bubble-display');
+        const bubbleTimerDisplay = document.getElementById('bubble-timer');
+        const bubbleHighscore = document.getElementById('bubble-highscore');
+        const bubbleStartBtn = document.getElementById('bubble-start');
+        const bubbleResetBtn = document.getElementById('bubble-reset');
+        
+        let bubbleScore = 0;
+        let bubbleGameInterval;
+        let bubbleRiseIntervals = [];
+        let bubbleTimeLeft = 30;
+        let bubbleGameActive = false;
+        let highScore = 0;
+
+        // Initialize the bubble game
+        function initBubbleGame() {
+            bubbleScore = 0;
+            bubbleTimeLeft = 30;
+            bubbleDisplay.textContent = `Score: ${bubbleScore}`;
+            bubbleTimerDisplay.textContent = `Time left: ${bubbleTimeLeft}s`;
+            bubbleContainer.innerHTML = '';
+            bubbleStartBtn.textContent = "Start Game";
+            bubbleGameActive = false;
+            
+            // Clear any existing intervals
+            clearInterval(bubbleGameInterval);
+            bubbleRiseIntervals.forEach(interval => clearInterval(interval));
+            bubbleRiseIntervals = [];
+            
+            // Load high score from local storage if available
+            const savedHighScore = localStorage.getItem('bubbleHighScore');
+            if (savedHighScore) {
+                highScore = parseInt(savedHighScore);
+                bubbleHighscore.textContent = `High Score: ${highScore}`;
+            } else {
+                bubbleHighscore.textContent = `High Score: 0`;
+            }
+        }
+
+        // Start the bubble game
+        function startBubbleGame() {
+            if (bubbleGameActive) return;
+            
+            bubbleGameActive = true;
+            bubbleScore = 0;
+            bubbleTimeLeft = 30;
+            bubbleDisplay.textContent = `Score: ${bubbleScore}`;
+            bubbleTimerDisplay.textContent = `Time left: ${bubbleTimeLeft}s`;
+            bubbleContainer.innerHTML = '';
+            bubbleStartBtn.textContent = "Playing...";
+            
+            // Clear any existing intervals
+            bubbleRiseIntervals.forEach(interval => clearInterval(interval));
+            bubbleRiseIntervals = [];
+            
+            // Create bubbles
+            bubbleGameInterval = setInterval(() => {
+                if (bubbleTimeLeft <= 0) {
+                    endBubbleGame();
+                    return;
+                }
+                
+                bubbleTimeLeft--;
+                bubbleTimerDisplay.textContent = `Time left: ${bubbleTimeLeft}s`;
+                
+                // Add a new bubble
+                createBubble();
+            }, 1000);
+        }
+
+        // Create a bubble
+        function createBubble() {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            
+            const size = Math.random() * 60 + 30;
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+            
+            const colors = ['#ff9aa2', '#ffb7b2', '#ffdac1', '#e2f0cb', '#b5ead7', '#c7ceea'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            bubble.style.background = `radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), ${color})`;
+            
+            bubble.style.left = `${Math.random() * (bubbleContainer.offsetWidth - size)}px`;
+            bubble.style.top = `${bubbleContainer.offsetHeight}px`;
+            
+            bubble.addEventListener('click', () => {
+                if (!bubbleGameActive) return;
+                
+                bubbleScore++;
+                bubbleDisplay.textContent = `Score: ${bubbleScore}`;
+                bubble.classList.add('popped');
+                
+                // Update high score if needed
+                if (bubbleScore > highScore) {
+                    highScore = bubbleScore;
+                    bubbleHighscore.textContent = `High Score: ${highScore}`;
+                    localStorage.setItem('bubbleHighScore', highScore);
+                }
+                
+                setTimeout(() => {
+                    if (bubble.parentNode) {
+                        bubble.remove();
+                    }
+                }, 300);
+            });
+            
+            bubbleContainer.appendChild(bubble);
+            
+            // Animate bubble rising
+            let position = bubbleContainer.offsetHeight;
+            const riseInterval = setInterval(() => {
+                if (!bubbleGameActive || position < -size || !bubble.parentNode) {
+                    clearInterval(riseInterval);
+                    if (bubble.parentNode) {
+                        bubble.remove();
+                    }
+                    return;
+                }
+                
+                position -= 2;
+                bubble.style.top = `${position}px`;
+            }, 20);
+            
+            bubbleRiseIntervals.push(riseInterval);
+        }
+
+        // End the bubble game
+        function endBubbleGame() {
+            bubbleGameActive = false;
+            clearInterval(bubbleGameInterval);
+            bubbleRiseIntervals.forEach(interval => clearInterval(interval));
+            bubbleRiseIntervals = [];
+            bubbleStartBtn.textContent = "Start Game";
+            
+            // Show game over message with score
+            setTimeout(() => {
+                alert(`Game over! Your score: ${bubbleScore}`);
+            }, 500);
+        }
+
+        // Bubble game event listeners
+        bubbleStartBtn.addEventListener('click', startBubbleGame);
+        bubbleResetBtn.addEventListener('click', initBubbleGame);
+
+        // Initialize games when page loads
+        window.onload = function() {
+            initMemoryGame();
+            initCookieClicker();
+            initBubbleGame();
+        };
+    </script>
+</body>
+</html>
